@@ -24,7 +24,7 @@ class Transfer extends ActiveRecord
     {
         return [
             [['sender_id', 'reciever_id'], 'integer'],
-            [['amount'] ,  'double']
+            [['amount'] ,  'number']
         ];
     }
 

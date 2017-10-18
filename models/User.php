@@ -17,7 +17,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules() {
         return [
             ['username' , 'string'],
-            ['balance' ,  'double']
+            ['balance' ,  'number']
         ];
     }
 
