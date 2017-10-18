@@ -19,7 +19,8 @@ $this->title = 'Transfer';
             'labelOptions' => ['class' => 'col-lg-1 control-label'],
         ],
     ]); ?>
-
+        <?= Yii::$app->session->getFlash('error'); ?>
+    
         <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
         <?= $form->field($model, 'amount')->textInput(['autofocus' => true]) ?>

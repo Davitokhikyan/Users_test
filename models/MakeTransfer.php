@@ -23,7 +23,7 @@ class MakeTransfer extends Model
     {
         return [
             [['username', 'amount'], 'required'],
-            ['amount' ,  'double']
+            ['amount' ,  'double' , 'min' => 0]
         ];
     }
 

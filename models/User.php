@@ -4,20 +4,24 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use app\models\Transfer;
 
 class User extends ActiveRecord implements IdentityInterface
 {
 
     public $authKey;
 
-    public static function tableName()
-    {
+    public static function tableName(){
        return 'users';
     }
+    
+    public function rules() {
+        return [
+            ['username' , 'string'],
+            ['balance' ,  'double']
+        ];
+    }
 
-    public static function findAllUsers()
-    {
+    public static function findAllUsers() {
         return static::find()->all();
     }
 
@@ -32,29 +36,25 @@ class User extends ActiveRecord implements IdentityInterface
 
         $model->username = $username;
 
-        return $model->save() ? $model : false;
-
+        return $model->save() && $model->validate() ? $model : false;
     }
 
     /**
      * @inheritdoc
      */
-    public static function findIdentity($id)
-    {
+    public static function findIdentity($id) {
         return static::findOne(['id' => $id]);
     }
 
     /**
      * @inheritdoc
      */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
+    public static function findIdentityByAccessToken($token, $type = null) {
         foreach (self::$users as $user) {
             if ($user['accessToken'] === $token) {
                 return new static($user);
             }
         }
-
         return null;
     }
 
@@ -64,32 +64,28 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
-    {
+    public static function findByUsername($username) {
         return static::findOne(['username' => $username]);
     }
 
     /**
      * @inheritdoc
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
     /**
      * @inheritdoc
      */
-    public function getAuthKey()
-    {
+    public function getAuthKey() {
         return $this->authKey;
     }
 
     /**
      * @inheritdoc
      */
-    public function validateAuthKey($authKey)
-    {
+    public function validateAuthKey($authKey) {
         return $this->authKey === $authKey;
     }
 
@@ -99,8 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
      */
-    public function validatePassword($password)
-    {
+    public function validatePassword($password) {
         return $this->password === $password;
     }
 }

@@ -18,6 +18,12 @@ class m171014_130621_create_transfer_table extends Migration
             'reciever_id' => $this->integer(),
             'amount' => $this->float(),
         ]);
+        
+        $this->addForeignKey(
+            'sender_id',
+            'reciever_id',
+            'CASCADE'
+        );
     }
 
     /**
@@ -25,6 +31,11 @@ class m171014_130621_create_transfer_table extends Migration
      */
     public function down()
     {
+        $this->dropForeignKey(
+            'sender_id',
+            'reciever_id'
+        );
+         
         $this->dropTable('transfer');
     }
 }

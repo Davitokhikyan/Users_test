@@ -78,9 +78,15 @@ class SiteController extends Controller
             return $this->redirect('/');
 
         $model = new MakeTransfer();
+        
         $user = Yii::$app->user->identity;
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $user->username != $model->username){
+        if ($model->load(Yii::$app->request->post()) && $model->validate()){
+            if ($user->username == $model->username){
+                \Yii::$app->getSession()->setFlash('error', 'You can not make payment to yourself');
+                return $this->redirect('/transfer');
+            }
+                
             $reciever = User::findByUsername($model->username);
 
             if (!$reciever)
@@ -109,7 +115,7 @@ class SiteController extends Controller
           return $this->redirect('/');
 
         return $this->render('history' , [
-            'transfers' => Transfer::getTransfersByUser( Yii::$app->user->identity->id)
+            'transfers' => Transfer::getTransfersByUser(Yii::$app->user->identity->id)
         ]);
     }
 
